@@ -1,5 +1,4 @@
-import { createServer} from 'node:http';
-import { memoryUsage } from 'node:process';
+import { createServer } from 'node:http';
 
 const ERROR_RESPONSE = {
     status: 404,
@@ -27,8 +26,11 @@ const db = {
     ]
 };
 
-function serverResponse(res,data) {
-    res.writeHead(data.status, {"Content-Type": "application/json"});
+const port = 6868;
+const hostname = '127.0.0.1';
+
+function serverResponse(res, data) {
+    res.writeHead(data.status, { "Content-Type": "application/json" });
     res.write(JSON.stringify(data));
     res.end();
 };
@@ -38,9 +40,50 @@ const server = createServer((req, res) => {
         status: 200,
     }
 
-    GET /api/tasks1
+    // GET / api / tasks
+    if (req.method === 'GET' && req.url === '/api/tasks') {
+        try {
+            response = {
+                data: db.tasks,
+                message: 'Get Tasks List Successfully',
+            }
+
+            serverResponse(req, res);
+
+            return;
+        } catch (error) {
+            response = ERROR_RESPONSE;
+        }
+    }
+
+    // [GET] /api/tasks/:id
+    if (req.method === 'GET' && req.url === '/api/tasks/:id') {
+
+    }
+
+    // [POST] /api/tasks
+    if (req.method === 'POST' && req.url === '/api/tasks') {
+
+    }
+
+    // [PUT] /api/tasks/:id
+    if (req.method === 'PUT' && req.url === '/api/tasks/:id') {
+
+    }
+
+    // [DELETE] /api/tasks/:id
+    if (req.method === 'DELETE' && req.url === '/api/tasks/:id') {
+
+    }
+
+    res.writeHead(200, { 'content-type': 'application/json' });
+    res.end(JSON.stringify({
+        data: response
+    }));
 });
 
-server.listen(3000, "127.0.0.1", () => {
-    console.log("Listening on 127.0.0.1:3000");
+
+
+server.listen(port, hostname, () => {
+    console.log(`Listening on ${hostname}:${port}`);
 });
