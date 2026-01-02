@@ -1,0 +1,58 @@
+Yêu cầu bài tập
+
+==============================================================================================================================
+1. Yêu cầu chung
+Tạo repo đặt tên phù hợp để viết API cho todo app (sẽ nộp link repo này)
+
+Tạo repo frontend tương ứng, để làm việc với API được viết ở trên
+
+Sử dụng .env.local để lưu BASE_API ứng với link backend ở local, .env.production lưu BASE_API ứng với link backend đã deploy
+
+Repo này cần được deploy với gh-pages
+
+Khi nộp bài, hãy nộp link repo backend, repo frontend và link đã deploy hãy comment tại phần "Ghi chú cho giáo viên"
+
+==============================================================================================================================
+2. Viết REST API cho Todo App
+Tạo file /server.js để viết REST API sử dụng NodeJS thuần (không framework).
+
+Tạo endpoint [GET] /api/tasks trả về danh sách tất cả tasks dưới dạng JSON array
+
+Tạo endpoint [GET] /api/tasks/:id trả về chi tiết 1 task theo id, nếu không tồn tại trả về status 404
+
+Tạo endpoint [POST] /api/tasks nhận JSON body có field title, tạo task mới với id tự tăng và isCompleted mặc định false, trả về status 201 và task vừa tạo
+
+Tạo endpoint [PUT] /api/tasks/:id nhận JSON body để cập nhật title và isCompleted của task, nếu không tồn tại trả về status 404
+
+Tạo endpoint [DELETE] /api/tasks/:id để xóa task, nếu không tồn tại trả về status 404, thành công trả về status 200
+
+Lưu trữ dữ liệu trong memory với cấu trúc mỗi task: { id: number, title: string, isCompleted: boolean }
+
+Xử lý CORS cho phép requests từ http://localhost:5173 và https://[github-username].github.io
+
+Tạo project frontend riêng với Vite, gọi API để hiển thị danh sách tasks dưới dạng list
+
+Frontend có input và button để thêm task mới, gọi POST API khi submit
+
+Mỗi task hiển thị checkbox để toggle trạng thái completed, gọi PUT API khi thay đổi
+
+Mỗi task có button xóa, gọi DELETE API và cập nhật lại danh sách
+
+==============================================================================================================================
+3. Tạo thêm endpoint bypass CORS
+Tại file /server.js, xử lý thêm path /bypass-cors?url=[target-url] chấp nhận bất kể methods nào. Backend xử lý gọi tới giá trị của param url với chính method đã gọi lên /bypass-cors, pass thêm toàn bộ body (nếu có). Mục tiêu tạo ra được API cho phép bypass bất kể URL nào dù URL đích không allow origin.
+
+Sau khi hoàn thành, tại dự án frontend bạn có thể test bằng cách gọi API tới /bypass-cors?url=https://api-gateway.fullstack.edu.vn/api/analytics, lấy được data ở trình duyệt và không lỗi CORS là thành công.
+
+Ví dụ cách lấy query params:
+
+// VD: Trình duyệt request tới backend với:
+// http://localhost:3000/bypass-cors?url=something...
+
+// Tại backend với Node
+const fullUrl = new URL(req.url, `http://${req.headers.host}`);
+const queryParams = fullUrl.searchParams;
+
+const url = queryParams.get('url');
+
+console.log(url); // "something..."
